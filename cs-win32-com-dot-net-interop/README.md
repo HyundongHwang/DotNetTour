@@ -1,0 +1,1 @@
+- https://hyundonghwang.github.io/2013/11/22/Cpp-COM-dotNET-interop/

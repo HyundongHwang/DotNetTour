@@ -1,0 +1,1 @@
+- https://hyundonghwang.github.io/2016/06/07/azure-powershell-%EC%9B%B9%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%A7%84%EB%8B%A8%EB%A1%9C%EA%B9%85/

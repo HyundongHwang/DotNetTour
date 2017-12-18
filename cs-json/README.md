@@ -1,0 +1,1 @@
+- https://hyundonghwang.github.io/2017/01/12/json-serialize-%ED%95%A0%EB%95%8C-enum%EC%9D%84-string-%EC%9C%BC%EB%A1%9C-%EB%B3%80%ED%99%98/

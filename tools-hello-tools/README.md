@@ -1,0 +1,1 @@
+- https://hyundonghwang.github.io/2016/12/31/dotnet-win32-IPC-dll-dependancy-%EC%82%BD%EC%A7%88%EA%B8%B0/

@@ -1,0 +1,1 @@
+- https://hyundonghwang.github.io/2016/05/27/Entity-Framework-db-first-%ED%85%8C%EC%8A%A4%ED%8A%B8/
