@@ -77,7 +77,7 @@ SerializationVersion           1.1.0.1
     - hello ASP.NET
     - [WebApi](/asp-net-web-api/README.md)
     - SPA
-    - SignalR
+    - [SignalR](/asp-net-signalr/READMD.md)
 - PowerShell
     - [hello PowerShell](/ps-hello-ps/README.md)
     - ls, cd, help, gcm, gal, sal ...
