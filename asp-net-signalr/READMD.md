@@ -1,0 +1,1 @@
+- https://hhd2002.blogspot.kr/2016/05/160525-signalr-self-host-ssl_96.html
