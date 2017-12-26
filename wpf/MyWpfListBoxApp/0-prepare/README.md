@@ -19,7 +19,7 @@ WPF를 잘 배우기 위한 예제로 여러장의 이미지와 텍스트컨텐�
 이 장에서는 HTTP요청을 하고 그 테스트를 하는 과정을 학습해 보기로 한다. <br>
 
 최종적인 결과물은 아래그립과 같다. <br>
-![]((https://s10.postimg.org/j5pjmb5qx/screenshot_114.png))
+![](https://s10.postimg.org/j5pjmb5qx/screenshot_114.png)
 
 이제부터 본격적인 개발을 시작해보자! <br>
 
