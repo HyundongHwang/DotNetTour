@@ -9,12 +9,31 @@
 
 <!-- /TOC -->
 
+<br>
+<br>
+<br>
+
 # MyWpfListBoxApp 개발준비
-웹API를 통해서 받은 데이타를 ListBox에 출력해 주는 어플리케이션을 준비.
+WPF를 잘 배우기 위한 예제로 여러장의 이미지와 텍스트컨텐츠가 리스팅 되는 어플리케이션을 제작해 보기로 한다. <br>
+샘플데이타를 준비해서 바로 UI개발부터 진행할수도 있겠지만, 여기서는 실전과 유사하게 HTTP 요청을 수행하여 이미지와 텍스트가 포함된 리스트 데이타를 받는 과정부터 시작하도록 한다. <br>
+이 장에서는 HTTP요청을 하고 그 테스트를 하는 과정을 학습해 보기로 한다. <br>
+
+최종적인 결과물은 아래그립과 같다. <br>
+![]((https://s10.postimg.org/j5pjmb5qx/screenshot_114.png))
+
+이제부터 본격적인 개발을 시작해보자! <br>
+
+<br>
+<br>
+<br>
 
 ## 프로젝트 생성
 - 이름 : MyWpfListBoxApp
 - 타입 : WPF App
+
+<br>
+<br>
+<br>
 
 ## 다음 이미지검색 API 소개
 다음 이미지검색 OPEN API를 직접 사용할수도 있겠지만, 예제를 간단히 하기 위해서 미리 데이타를 캐시해둔 서버를 준비해 두었다. <br>
@@ -52,6 +71,10 @@ GET https://hhdfuncopenapicache.azurewebsites.net/api/DaumImgSearchApi?query={�
 }
 ```
 
+<br>
+<br>
+<br>
+
 ## API 호출 구현
 HTTP GET 요청을 구현하는 방법은 여러가지가 있겠으나 자주 사용되는 `HttpClient` 클래스를 사용하기로 한다.<br>
 `HttpClient` 는 `System.Net.Http.dll` 에 포함되어 있는데 이는 프로젝트 생성시 기본으로 참조추가 되어 있어서 별도의 참조추가 작업없이 바로 사용가능하다.<br>
@@ -80,6 +103,10 @@ public class DaumImgSearchApi
 
 - 001 : 검색어를 입력받고, 결과로 json문자열을 리턴하는 원본 API형태의 기본 함수형태로 시작한다. json문자열을 객체로 변환하는 것은 이후에 서술한다.
 - 002 : HttpClient는 비관리객체, 즉 메모리 GC만으로는 정리작업이 완결되지 않는 객체이다. 이 때문에 추가적인 정리작업이 필요하고, 보통 C#에서는 이런 비관리객체는 IDisposable 인터페이스를 상속받게 하여 객체해제시 Dispose함수를 호출하도록 강제한다. 이 Dispose함수의 호출이 잊지않고 안전하게 이뤄지기 위해서 C#에서는 언어차원에서 using 블럭을 지원하며 이 블럭을 나갈때 Dispose함수가 자동으로 호출되므로 안전하고 편리하다. HttpClient는 내부에서 TCP소켓객체를 사용하고 이를 연결종료하는 추가적인 작업이 필요해서 비관리객체로 분류한다. 주로 파일I/O, 네트워크I/O, 스트림, 데이타베이스 관련객체들이 비관리객체들인데 사용자클래스라도 정리작업이 별도로 필요한경우 얼마든지 IDisposable을 상속받아서 정리작업을 구현하면 된다.
+
+<br>
+<br>
+<br>
 
 ## API 호출 테스트
 이렇게 API를 호출하는 기본구현이 되었으니 테스트를 해서 정상동작 여부를 확인해 보자. <br>
@@ -128,6 +155,10 @@ public class MyTests
 이렇게 Test Explorer가 활성화 되면 실제로 유닛테스트를 실행해 볼수 있다.  <br>
 ![](https://s9.postimg.org/3qqrfc7fj/screenshot_111.png) <br>
 ![](https://s9.postimg.org/3qqrfhs1r/screenshot_112.png)
+
+<br>
+<br>
+<br>
 
 ## json문자열을 C#객체로 변환
 응답을 json문자열로 수신했으므로 C#객체로 변환해주어야 한다. <br>
@@ -212,4 +243,4 @@ public class MyTests
 ```
 
 - 007
-  - 테스트클래스도 변경에 맞게 수정해야 한다.
+  - 테스트의 내용들도 ExecuteAsync 의 변경으로 빌드오류가 발생하니 올바른 테스트가 되도록 적절히 수정해 줘야 한다.
