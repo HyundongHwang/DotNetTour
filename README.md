@@ -86,6 +86,11 @@ SerializationVersion           1.1.0.1
     - script
     - call .NET dll
     - ps gallery publish
+- 설치, 업데이트
+    - hello install, update
+    - NSIS simple
+    - NSIS pluging
+    - updater
 - Tools
     - [hello tools](/tools-hello-tools/README.md)
     - [git](/tools-git/README.md)
