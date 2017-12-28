@@ -28,7 +28,7 @@ WPF중심으로 닷넷프로그래밍 전반, 윈도우어플리케이션 개발
 
 
 ## 도서샘플
-실제 집필을 하는 마음으로 한챕터를 작성해 보았다.
+실제 집필을 하는 마음으로 한챕터를 작성해 보았다. <br>
 [WPF/MyWpfListBoxApp/준비](/wpf/MyWpfListBoxApp/0-prepare/README.md)
 
 
