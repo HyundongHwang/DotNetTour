@@ -4,39 +4,40 @@
 
 - [DotNetTour](#dotnettour)
     - [소개](#%EC%86%8C%EA%B0%9C)
+    - [도서샘플](#%EB%8F%84%EC%84%9C%EC%83%98%ED%94%8C)
+    - [목차](#%EB%AA%A9%EC%B0%A8)
     - [현재환경](#%ED%98%84%EC%9E%AC%ED%99%98%EA%B2%BD)
-    - [로드맵](#%EB%A1%9C%EB%93%9C%EB%A7%B5)
 
 <!-- /TOC -->
 
+<br>
+<br>
+<br>
+
 ## 소개
+`DotNetTour`는 이책을 위한 가제목으로, 닷넷의 여러 부분을 패키지 관광상품처럼 편하면서도 실속있게 여행하는 기분으로 학습해보자는 취지로 생각한 이름이다. <br>
+WPF중심으로 닷넷프로그래밍 전반, 윈도우어플리케이션 개발 일부에 대해 다룰것이다. <br>
+간단하지만 실용적인 예제가 항상 함께 제공될 것이며, 실제기능구현에 초점을 맞춰서 이를 따라하면서 그 기본과 원리를 배워보도록 한다. <br>
+이 문서는 이 책의 목차에 해당하는데 집필과정중 변경될 수 있다. <br>
+목차에 하이퍼링크가 걸려 있는 경우가 있는데 이는 연관된 내용이 필자의 블로그글로 존재하는 경우 연결한 것이다. <br>
+이 문서는 현재 github 사이트에 공개되어 있지만 실제 출판사와 집필계약에 따라 비공개로 변경될 수 있다. <br>
 
-- .NET 기술을 이용해서 실용적이고 단순한 예제를 만들고 설명을 추가
-- 책을 집필하는 자세로 정성껏 기록하되 매일 조금이라도 작성하는게 목표
-- 아름다운 .NET 코드로 우아하고 재미있는 프로그래밍!!!
+<br>
+<br>
+<br>
 
-## 현재환경
-- Windows 10
-- Visual Studio 2017 Community Edition Preview
-- Visual Studio Code
-- PowerShell 5
 
-```powershell
-PS C:\> $PSVersionTable
+## 도서샘플
+실제 집필을 하는 마음으로 한챕터를 작성해 보았다.
+[WPF/MyWpfListBoxApp/준비](/wpf/MyWpfListBoxApp/0-prepare/README.md)
 
-Name                           Value
-----                           -----
-PSVersion                      5.1.16299.98
-PSEdition                      Desktop
-PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
-BuildVersion                   10.0.16299.98
-CLRVersion                     4.0.30319.42000
-WSManStackVersion              3.0
-PSRemotingProtocolVersion      2.3
-SerializationVersion           1.1.0.1
-```
 
-## 로드맵
+<br>
+<br>
+<br>
+
+
+## 목차
 - [hello .NET](/hello-dot-net/README.md)
 - C#
     - hello c#
@@ -98,3 +99,29 @@ SerializationVersion           1.1.0.1
     - [markdown](/tools-md/README.md)
     - [code2flow](/tools-code2flow/README.md)
     - [windows useful exe](/tools-win-useful-exe/README.md)
+
+<br>
+<br>
+<br>
+
+
+## 현재환경
+- Windows 10
+- Visual Studio 2017 Community Edition Preview
+- Visual Studio Code
+- PowerShell 5
+
+```powershell
+PS C:\> $PSVersionTable
+
+Name                           Value
+----                           -----
+PSVersion                      5.1.16299.98
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.16299.98
+CLRVersion                     4.0.30319.42000
+WSManStackVersion              3.0
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1
+```
