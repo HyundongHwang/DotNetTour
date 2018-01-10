@@ -47,7 +47,7 @@ C# 문법 기초
 
 ## 목차
 - hello .NET
-    - [이론] 닷넷프레임워크 소개
+    - [이론] 닷넷프레임워크 개요
         - 닷넷프레임워크 역사
         - 닷넷프레임워크 구성도
     - [이론] 이책에서 다루는 닷넷프레임워크 관련 기술들
@@ -59,7 +59,7 @@ C# 문법 기초
         - VisualStudio 2017 Community Edition Preview
 - C#
     - hello c#
-        - [이론] c# 소개
+        - [이론] C# 개요
         - [실습] HelloCsharpApp
             - 기본 콘솔프로젝트 생성
             - "hello c#" 출력
@@ -68,13 +68,13 @@ C# 문법 기초
             - 자동생성 파일 분석
             - exe, dll 파일 배포 분석
     - json
-        - [이론] 라이브러리 프로젝트, 종속성관리 소개
+        - [이론] 라이브러리 프로젝트, 종속성관리
         - [이론] nuget 소개
             - 라이브러리 설치, 삭제, 업데이트
             - 설치된 파일들 분석
         - [실습] json serialize/deserialize
     - async/await
-        - [이론] async/await, 멀티스레드 프로그래밍 소개
+        - [이론] 멀티스레드 프로그래밍, async/await
         - [이론] 멀티스레드 상황별 async/await 개발 패턴 소개
         - [실습] 각 개발패턴 구현
         - [이론] 자동생성 파일 분석
@@ -273,7 +273,7 @@ C# 문법 기초
         - [이론] nsis 소개
         - [실습] MyApp 설치/삭제 프로그램
     - NSIS pluging
-        - [이론] 플러그인 필요성, 소개
+        - [이론] 플러그인 소개
         - [실습] 설치프로그램에서 닷넷프레임워크 버전체크후 다운로드후 설치
     - 배포, 롤백 스크립트
         - [이론] 배포/롤백 자동화 스크립트 소개
@@ -284,23 +284,26 @@ C# 문법 기초
         - [실습] MyAppUpdater.exe 구현
         - [실습] 업데이트 
     - 코드사인
-        - [이론] 코드사인의 필요성, 원리
+        - [이론] 코드사인의 원리
         - [실습] 테스트 인증서 생성
         - [실습] exe, dll에 코드사인
         - [실습] 각 환경별 코드사인 확인
     - 난독화
-        - [이론] 난독화 필요성, 소개
+        - [이론] 난독화 소개
         - [실습] Dotfuscator 사용하여 바이너리 난독화하기
-        - [실습] ildasm 이용하여 디스어셈블 공격하기
+            - ildasm 이용하여 디스어셈블 성공
+            - Dotfuscator 사용하여 바이너리 난독화하기
+            - ildasm 이용하여 디스어셈블 실패
     - 바이러스 검사
-        - [이론] 배포전 바이러스검사 필요성, 인터넷 백신 virustotal 소개
+        - [이론] 배포전 바이러스검사, 인터넷 백신 virustotal 소개
         - [실습] virustotal 로 배포전 검사하기
     - 빌드/배포 자동화
-        - [이론] Trevis 소개
-        - [실습] Trevis 활성화
-        - [실습] MySimpleWpfApp 프로젝트 구현, 빌드/배포 스크립트 작성
-        - [실습] Trevis 설정파일 작성
-        - [실습] github push 후 Trevis 동작 테스트
+        - [이론] appveyor CI 소개
+        - [실습] appveyor CI 실습
+            - sample WPF 프로젝트 준비
+            - 서비스가입
+            - appveyor.yaml 설정파일 작성
+            - git push 연동하여 빌드, 배포 자동화 테스트
 - 기타 개발툴
     - hello tools
         - [이론] 개발툴과 생산성 소개
@@ -341,7 +344,7 @@ C# 문법 기초
         - [이론] FastFilePub 클라우드기반 파일공유 스크립트 소개
         - [실습] FastFilePub 파일업로드, 조회, 삭제 테스트
     - VS CodeSnippet
-        - [이론] CodeSnippet 필요성, 소개
+        - [이론] CodeSnippet 소개
         - [실습] DependancyProperty 를 위한 VS CodeSnippet 작성하기, 적용하기
     - other windows useful util ...
 
