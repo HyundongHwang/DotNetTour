@@ -45,10 +45,17 @@ namespace AsyncAwaitTaskSample
                 {
                     download_image_list_when_all();
                 }
+                else if (cmd == Commands.cancel)
+                {
+                    cancel();
+                }
             }
         }
 
-
+        private static void cancel()
+        {
+            _cts?.Cancel();
+        }
 
         private static void download_image_list_sync()
         {
@@ -105,6 +112,7 @@ namespace AsyncAwaitTaskSample
         }
 
 
+        private static CancellationTokenSource _cts = new CancellationTokenSource();
 
         private static async void download_image_list_when_all()
         {
@@ -119,7 +127,20 @@ namespace AsyncAwaitTaskSample
             }
 
             Console.WriteLine($"Task.WhenAll start ...");
-            await Task.WhenAll(taskList);
+
+            try
+            {
+                await Task.WhenAll(taskList);
+            }
+            catch (TaskCanceledException tcex)
+            {
+                Console.WriteLine($"tasks is canceled !!! tcex : {tcex}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"another exception !!! ex : {ex}");
+            }
+            
             Console.WriteLine($"Task.WhenAll end !!!");
             Console.WriteLine($"download_image_list_when_all end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
         }
@@ -133,16 +154,20 @@ namespace AsyncAwaitTaskSample
             var filePath = Path.Combine(exeDir, fileName);
 
             using (var client = new HttpClient())
-            using (var resStream = await client.GetStreamAsync(url))
-            using (var fs = File.Open(filePath, FileMode.Create))
             {
-                resStream.CopyTo(fs);
+                var resMsg = await client.GetAsync(url, _cts.Token);
+
+                using (var resStream = await resMsg.Content.ReadAsStreamAsync())
+                using (var fs = File.Open(filePath, FileMode.Create))
+                {
+                    resStream.CopyTo(fs);
+                }
             }
 
             Console.WriteLine($"download end !!! url : {url}");
         }
 
-        
+
 
     }
 }
