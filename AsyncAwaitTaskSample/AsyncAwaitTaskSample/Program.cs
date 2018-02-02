@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -12,59 +13,124 @@ namespace AsyncAwaitTaskSample
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Welcome to AsyncAwaitTaskSample.");
             Console.WriteLine("This is cmd list : ");
-            var cmdList = Enum.GetNames(typeof(Commands));
 
-            foreach (var cmd in cmdList)
+            var methodList = typeof(Program).GetRuntimeMethods().Where(m => m.Name.StartsWith("dt")).ToList();
+
+            foreach (var m in methodList)
             {
-                Console.WriteLine($"* {cmd}");
+                Console.WriteLine($"* {m.Name}");
             }
+
+            Console.WriteLine("Type the keyword ... ");
+
+
 
             while (true)
             {
                 Console.Write("CMD> ");
-                var cmd = Commands.none;
                 var cmdStr = Console.ReadLine();
-                Enum.TryParse<Commands>(cmdStr, out cmd);
+                var count = methodList.Where(m => m.Name.Contains(cmdStr)).Count();
 
-                if (cmd == Commands.none)
+                if (string.IsNullOrEmpty(cmdStr))
                 {
+                    continue;
                 }
-                else if (cmd == Commands.download_image_list_sync)
+
+                if (count != 1)
                 {
-                    download_image_list_sync();
+                    Console.WriteLine("wrong command !!!");
+                    continue;
                 }
-                else if (cmd == Commands.download_image_list_async)
+
+
+
+                var foundMethod = methodList.Where(m => m.Name.Contains(cmdStr)).First();
+
+                try
                 {
-                    download_image_list_async();
+                    Console.WriteLine($"{foundMethod.Name} invoke !!!");
+                    foundMethod.Invoke(null, null);
                 }
-                else if (cmd == Commands.download_image_list_when_all)
+                catch (Exception ex)
                 {
-                    download_image_list_when_all();
-                }
-                else if (cmd == Commands.cancel)
-                {
-                    cancel();
+                    Console.WriteLine($"ex : {ex}");
                 }
             }
         }
 
-        private static void cancel()
+
+
+        private static void dt_sync()
         {
-            _cts?.Cancel();
+            DtUtils.ConsoleWriteLine("dt_sync start ... ", "dt_sync");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Thread.Sleep(1000);
+                DtUtils.ConsoleWriteLine($"dt_sync {i} ...");
+            }
+
+            DtUtils.ConsoleWriteLine("dt_sync end !!! ", "dt_sync");
         }
 
-        private static void download_image_list_sync()
+
+        private static void dt_callback()
+        {
+            DtUtils.ConsoleWriteLine("dt_callback start ... ", "dt_callback");
+            _idx = 0;
+            _dt_callback();
+        }
+
+        private static void _dt_callback()
+        {
+            ThreadPool.QueueUserWorkItem((arg) =>
+            {
+                if (_idx == 10)
+                {
+                    DtUtils.ConsoleWriteLine("dt_callback end !!! ", "dt_callback");
+                    return;
+                }
+
+                Thread.Sleep(1000);
+                DtUtils.ConsoleWriteLine($"dt_callback {_idx} ...");
+                _idx = _idx + 1;
+                _dt_callback();
+            });
+        }
+
+        private static async void dt_async()
+        {
+            DtUtils.ConsoleWriteLine("dt_async start ... ", "dt_async");
+
+            for (int i = 0; i < 10; i++)
+            {
+                await _run_long_task(i);
+            }
+
+            DtUtils.ConsoleWriteLine("dt_async end !!! ", "dt_async");
+        }
+
+        private static async Task _run_long_task(int i)
+        {
+            await Task.Run(() => 
+            {
+                Thread.Sleep(1000);
+                DtUtils.ConsoleWriteLine($"dt_async {i} ...");
+            });
+        }
+
+        private static void dt_download_image_list_sync()
         {
             var old = DateTime.Now;
-            Console.WriteLine($"download_image_list_sync start ...");
+            DtUtils.ConsoleWriteLine($"download_image_list_sync start ...");
 
             foreach (var url in Constances.WALLPAPERSWIDE_IMAGE_LIST)
             {
-                Console.WriteLine($"download start !!! url : {url}");
+                DtUtils.ConsoleWriteLine($"download start ... url : {url}");
 
                 var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 var fileName = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
@@ -77,22 +143,67 @@ namespace AsyncAwaitTaskSample
                     resStream.CopyTo(fs);
                 }
 
-                Console.WriteLine($"download end !!! url : {url}");
+                DtUtils.ConsoleWriteLine($"download end !!! url : {url}");
             }
 
-            Console.WriteLine($"download_image_list_sync end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
+            DtUtils.ConsoleWriteLine($"download_image_list_sync end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
         }
 
 
 
-        private static async void download_image_list_async()
+        private static int _idx = 0;
+
+        private static void dt_download_image_list_callback()
+        {
+            if (_idx >= Constances.WALLPAPERSWIDE_IMAGE_LIST.Length)
+            {
+                DtUtils.ConsoleWriteLine($"download_image_list_callback end !!!");
+                _idx = 0;
+                return;
+            }
+            else
+            {
+                if (_idx == 0)
+                    DtUtils.ConsoleWriteLine($"download_image_list_callback start ...");
+
+                _idx = _idx + 1;
+            }
+            
+            var url = Constances.WALLPAPERSWIDE_IMAGE_LIST[_idx];
+            DtUtils.ConsoleWriteLine($"download start ... url : {url}");
+            var req = (HttpWebRequest)WebRequest.CreateHttp(url);
+            req.BeginGetResponse(_res_callback, req);
+        }
+
+        private static void _res_callback(IAsyncResult ar)
+        {
+            var req = (HttpWebRequest)ar.AsyncState;
+            var url = req.RequestUri.ToString();
+            var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var fileName = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+            var filePath = Path.Combine(exeDir, fileName);
+
+            using (var res = req.EndGetResponse(ar))
+            using (var resStream = res.GetResponseStream())
+            using (var fs = File.Open(filePath, FileMode.Create))
+            {
+                resStream.CopyTo(fs);
+            }
+
+            DtUtils.ConsoleWriteLine($"download end !!! url : {url}");
+            dt_download_image_list_callback();
+        }
+        
+
+        
+        private static async void dt_download_image_list_async()
         {
             var old = DateTime.Now;
-            Console.WriteLine($"download_image_list_async start ...");
+            DtUtils.ConsoleWriteLine($"download_image_list_async start ...");
 
             foreach (var url in Constances.WALLPAPERSWIDE_IMAGE_LIST)
             {
-                Console.WriteLine($"download start ... url : {url}");
+                DtUtils.ConsoleWriteLine($"download start ... url : {url}");
 
                 var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 var fileName = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
@@ -105,19 +216,27 @@ namespace AsyncAwaitTaskSample
                     resStream.CopyTo(fs);
                 }
 
-                Console.WriteLine($"download end !!! url : {url}");
+                DtUtils.ConsoleWriteLine($"download end !!! url : {url}");
             }
 
-            Console.WriteLine($"download_image_list_async end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
+            DtUtils.ConsoleWriteLine($"download_image_list_async end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
         }
+        
 
 
         private static CancellationTokenSource _cts = new CancellationTokenSource();
 
-        private static async void download_image_list_when_all()
+        private static void dt_cancel()
+        {
+            _cts?.Cancel();
+        }
+
+
+
+        private static async void dt_download_image_list_when_all()
         {
             var old = DateTime.Now;
-            Console.WriteLine($"download_image_list_when_all start ...");
+            DtUtils.ConsoleWriteLine($"download_image_list_when_all start ...");
             var taskList = new List<Task>();
 
             foreach (var url in Constances.WALLPAPERSWIDE_IMAGE_LIST)
@@ -126,7 +245,7 @@ namespace AsyncAwaitTaskSample
                 taskList.Add(task);
             }
 
-            Console.WriteLine($"Task.WhenAll start ...");
+            DtUtils.ConsoleWriteLine($"Task.WhenAll start ...");
 
             try
             {
@@ -134,20 +253,20 @@ namespace AsyncAwaitTaskSample
             }
             catch (TaskCanceledException tcex)
             {
-                Console.WriteLine($"tasks is canceled !!! tcex : {tcex}");
+                DtUtils.ConsoleWriteLine($"tasks is canceled !!! tcex : {tcex}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"another exception !!! ex : {ex}");
+                DtUtils.ConsoleWriteLine($"another exception !!! ex : {ex}");
             }
-            
-            Console.WriteLine($"Task.WhenAll end !!!");
-            Console.WriteLine($"download_image_list_when_all end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
+
+            DtUtils.ConsoleWriteLine($"Task.WhenAll end !!!");
+            DtUtils.ConsoleWriteLine($"download_image_list_when_all end !!! {(DateTime.Now - old).TotalMilliseconds} ms");
         }
 
         private static async Task _download_img(string url)
         {
-            Console.WriteLine($"download start ... url : {url}");
+            DtUtils.ConsoleWriteLine($"download start ... url : {url}");
 
             var exeDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var fileName = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
@@ -164,10 +283,7 @@ namespace AsyncAwaitTaskSample
                 }
             }
 
-            Console.WriteLine($"download end !!! url : {url}");
+            DtUtils.ConsoleWriteLine($"download end !!! url : {url}");
         }
-
-
-
     }
 }
