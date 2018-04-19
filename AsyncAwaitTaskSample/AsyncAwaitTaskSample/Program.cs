@@ -70,7 +70,7 @@ namespace AsyncAwaitTaskSample
 
             for (int i = 0; i < 10; i++)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
                 DtUtils.ConsoleWriteLine($"dt_sync {i} ...");
             }
 
@@ -95,7 +95,7 @@ namespace AsyncAwaitTaskSample
                     return;
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
                 DtUtils.ConsoleWriteLine($"dt_callback {_idx} ...");
                 _idx = _idx + 1;
                 _dt_callback();
@@ -106,9 +106,20 @@ namespace AsyncAwaitTaskSample
         {
             DtUtils.ConsoleWriteLine("dt_async start ... ", "dt_async");
 
-            for (int i = 0; i < 10; i++)
+            try
             {
-                await _run_long_task(i);
+                for (int i = 0; i < 10; i++)
+                {
+                    await _run_long_task(i);
+                }
+            }
+            catch (TaskCanceledException tcex)
+            {
+                DtUtils.ConsoleWriteLine($"tasks is canceled !!!");
+            }
+            catch (Exception ex)
+            {
+                DtUtils.ConsoleWriteLine($"another exception !!! ex : {ex}");
             }
 
             DtUtils.ConsoleWriteLine("dt_async end !!! ", "dt_async");
@@ -118,9 +129,9 @@ namespace AsyncAwaitTaskSample
         {
             await Task.Run(() => 
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
                 DtUtils.ConsoleWriteLine($"dt_async {i} ...");
-            });
+            }, _cts.Token);
         }
 
         private static void dt_download_image_list_sync()
@@ -253,7 +264,7 @@ namespace AsyncAwaitTaskSample
             }
             catch (TaskCanceledException tcex)
             {
-                DtUtils.ConsoleWriteLine($"tasks is canceled !!! tcex : {tcex}");
+                DtUtils.ConsoleWriteLine($"tasks is canceled !!!");
             }
             catch (Exception ex)
             {
